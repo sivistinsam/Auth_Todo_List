@@ -12,13 +12,14 @@ import {
 } from "@mui/material";
 
 const Todo = () => {
+    // Define state variables for task input, task list, and filter
   const [text, setText] = useState("");
   const [arr, setArr] = useState([]);
   const [filter, setFilter] = useState("all");
-
+    // Define state variables for task editing
   const [editingTaskId, setEditingTaskId] = useState(null); // To track which task is being edited
   const [editedText, setEditedText] = useState(""); // To store edited task text
-
+    // Function to add a new item to the task list
   const addItem = () => {
     if (text.length === 0) {
       alert("Please Enter Something First");
@@ -32,18 +33,18 @@ const Todo = () => {
     setArr((oldItem) => [...oldItem, item]);
     setText("");
   };
-
+     // Event handler for Enter key press to add an item
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
       addItem();
     }
   };
-
+// Function to delete a task item
   const delHandler = (id) => {
     let newArray = arr.filter((item) => item.id !== id);
     setArr(newArray);
   };
-
+   // Function to handle checkbox toggle for completed tasks
   const checkboxHandler = (id) => {
     const updatedArr = arr.map((item) => {
       if (item.id === id) {
@@ -56,7 +57,8 @@ const Todo = () => {
     });
     setArr(updatedArr);
   };
-
+  
+  // Load saved tasks from localStorage on component mount
   useEffect(() => {
     const savedTasks = JSON.parse(localStorage.getItem("tasks"));
     if (savedTasks) {
@@ -64,10 +66,12 @@ const Todo = () => {
     }
   }, []);
 
+  // Store the current task list in localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(arr));
   }, [arr]);
-
+  
+    // Function to filter tasks based on the selected filter option
   const filteredTasks = () => {
     if (filter === "completed") {
       return arr.filter((item) => item.checked);
