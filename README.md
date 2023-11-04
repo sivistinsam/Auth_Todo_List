@@ -1,6 +1,5 @@
 # Getting Started with Create React App
-
-![Screenshot 2023-11-04 at 5 47 51 PM](https://github.com/sivistinsam/Auth_Todo_List/assets/57314972/201dedd1-5251-4fdf-afea-c4fe50b74ed9)
+![Screenshot 2023-11-04 at 6 44 29 PM](https://github.com/sivistinsam/Auth_Todo_List/assets/57314972/64617516-825f-4c28-a340-1d0618625f37)
 
 ![Screenshot 2023-11-04 at 5 48 11 PM](https://github.com/sivistinsam/Auth_Todo_List/assets/57314972/995325cd-23f9-407f-918f-ed87bfd35019)
 
