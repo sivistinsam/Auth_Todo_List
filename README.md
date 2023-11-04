@@ -6,6 +6,7 @@
 
 Hosted Link : https://superlative-narwhal-635c0e.netlify.app/
 
+Short Description: This is a Todo List App made with React, Javascript, Material-UI, React Hooks and for authentication I have use Auth0 Hooks four user Login and Signup. In this Todo List User can login or signup and add his/her tasks in todo list app. This Todo App is Hosted on Netlify and running Live. And Source code is available in github.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
