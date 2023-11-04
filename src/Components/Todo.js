@@ -1,19 +1,28 @@
+// Import necessary dependencies and components from Material-UI
 import React, { useState, useEffect } from "react";
-// import * as React from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
-import { TextField, Button,MenuItem,Select,InputLabel,FormControl } from "@mui/material";
+import {
+  TextField,
+  Button,
+  MenuItem,
+  Select,
+  InputLabel,
+  FormControl,
+} from "@mui/material";
 
+// Define the functional component named Todo
 const Todo = () => {
+  // Define state variables using the useState hook
   const [text, setText] = useState("");
   const [arr, setArr] = useState([]);
-  const [filter, setFilter] = useState("all"); 
+  const [filter, setFilter] = useState("all");
 
+  // Function to add a new item to the task list
   const addItem = () => {
     if (text.length === 0) {
       alert("Please Enter Something First");
-
       return;
     }
     const item = {
@@ -24,17 +33,21 @@ const Todo = () => {
     setArr((oldItem) => [...oldItem, item]);
     setText("");
   };
-  const handleKeyPress = (event)=>{
-    if(event.key==="Enter"){
-      addItem()
+
+  // Event handler for Enter key press to add an item
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      addItem();
     }
+  };
 
-  }
-
+  // Function to delete a task item
   const delHandler = (id) => {
     let newArray = arr.filter((item) => item.id !== id);
     setArr(newArray);
   };
+
+  // Function to handle the checkbox toggle for completed tasks
   const checkboxHandler = (id) => {
     const updatedArr = arr.map((item) => {
       if (item.id === id) {
@@ -48,7 +61,7 @@ const Todo = () => {
     setArr(updatedArr);
   };
 
-  // Load tasks from local storage when the component mounts
+  // Load saved tasks from localStorage on component mount
   useEffect(() => {
     const savedTasks = JSON.parse(localStorage.getItem("tasks"));
     if (savedTasks) {
@@ -56,19 +69,22 @@ const Todo = () => {
     }
   }, []);
 
-  // Save tasks to local storage whenever arr changes
+  // Store the current task list in localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(arr));
   }, [arr]);
 
-   const filteredTasks = () => {
-     if (filter === "completed") {
-       return arr.filter((item) => item.checked);
-     } else if (filter === "uncompleted") {
-       return arr.filter((item) => !item.checked);
-     }
-     return arr; // Default "All" filter
-   };
+  // Function to filter tasks based on the selected filter option
+  const filteredTasks = () => {
+    if (filter === "completed") {
+      return arr.filter((item) => item.checked);
+    } else if (filter === "uncompleted") {
+      return arr.filter((item) => !item.checked);
+    }
+    return arr;
+  };
+
+  // Render the user interface for the Todo component
   return (
     <div
       style={{
@@ -79,7 +95,6 @@ const Todo = () => {
       }}
     >
       <CssBaseline />
-
       <Container maxWidth="md">
         <Box
           sx={{
@@ -107,44 +122,37 @@ const Todo = () => {
           >
             Add Item
           </Button>
-          <FormControl >
+          <FormControl>
             <InputLabel id="demo-simple-select-label">Tasks</InputLabel>
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               value={filter}
               label="Tasks"
-              onChange={(e)=>setFilter(e.target.value)}
+              onChange={(e) => setFilter(e.target.value)}
             >
-              <MenuItem value='all'>All</MenuItem>
-              <MenuItem value='completed'>Completed</MenuItem>
-              <MenuItem value='uncompleted'>Incomplete</MenuItem>
+              <MenuItem value="all">All</MenuItem>
+              <MenuItem value="completed">Completed</MenuItem>
+              <MenuItem value="uncompleted">Incomplete</MenuItem>
             </Select>
           </FormControl>
-        
 
           <Box>
+            {/* Map and display the filtered tasks */}
             {filteredTasks().map((item) => (
               <Box
                 sx={{
-                  // display: "flex",
                   justifyContent: "space-between",
                   textDecoration: item.checked ? "line-through" : null,
                   width: "100%",
-                  // margin: "20px",
                   display: "flex",
                   backgroundColor: "skyblue",
-                  // border: "1px solid red",
                   borderRadius: "20px",
                   margin: "10px",
                   padding: "10px",
                   fontSize: "18px",
                   fontFamily: "Arial",
                   fontWeight: "600",
-
-                  // display: 'grid',
-                  // gridTemplateColumns: '4fr 1fr',
-                  // gap: '10px',
                 }}
                 key={item.id}
               >
@@ -161,7 +169,6 @@ const Todo = () => {
                       width: "50px",
                     }}
                   />
-
                   {item.name}
                 </Box>
                 <Box>
@@ -218,4 +225,5 @@ const Todo = () => {
   );
 };
 
+// Export the Todo component
 export default Todo;
