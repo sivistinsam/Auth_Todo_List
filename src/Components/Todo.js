@@ -1,4 +1,3 @@
-// Import necessary dependencies and components from Material-UI
 import React, { useState, useEffect } from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
@@ -12,14 +11,14 @@ import {
   FormControl,
 } from "@mui/material";
 
-// Define the functional component named Todo
 const Todo = () => {
-  // Define state variables using the useState hook
   const [text, setText] = useState("");
   const [arr, setArr] = useState([]);
   const [filter, setFilter] = useState("all");
 
-  // Function to add a new item to the task list
+  const [editingTaskId, setEditingTaskId] = useState(null); // To track which task is being edited
+  const [editedText, setEditedText] = useState(""); // To store edited task text
+
   const addItem = () => {
     if (text.length === 0) {
       alert("Please Enter Something First");
@@ -34,20 +33,17 @@ const Todo = () => {
     setText("");
   };
 
-  // Event handler for Enter key press to add an item
   const handleKeyPress = (event) => {
     if (event.key === "Enter") {
       addItem();
     }
   };
 
-  // Function to delete a task item
   const delHandler = (id) => {
     let newArray = arr.filter((item) => item.id !== id);
     setArr(newArray);
   };
 
-  // Function to handle the checkbox toggle for completed tasks
   const checkboxHandler = (id) => {
     const updatedArr = arr.map((item) => {
       if (item.id === id) {
@@ -61,7 +57,6 @@ const Todo = () => {
     setArr(updatedArr);
   };
 
-  // Load saved tasks from localStorage on component mount
   useEffect(() => {
     const savedTasks = JSON.parse(localStorage.getItem("tasks"));
     if (savedTasks) {
@@ -69,12 +64,10 @@ const Todo = () => {
     }
   }, []);
 
-  // Store the current task list in localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(arr));
   }, [arr]);
 
-  // Function to filter tasks based on the selected filter option
   const filteredTasks = () => {
     if (filter === "completed") {
       return arr.filter((item) => item.checked);
@@ -84,16 +77,29 @@ const Todo = () => {
     return arr;
   };
 
-  // Render the user interface for the Todo component
+  // Function to handle the editing of a task
+  const handleEditTask = (taskId, initialText) => {
+    setEditingTaskId(taskId);
+    setEditedText(initialText);
+  };
+
+  // Function to save the edited task
+  const handleSaveEditedTask = (taskId) => {
+    const updatedArr = arr.map((item) => {
+      if (item.id === taskId) {
+        return {
+          ...item,
+          name: editedText,
+        };
+      }
+      return item;
+    });
+    setArr(updatedArr);
+    setEditingTaskId(null); // Clear editing state
+  };
+
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
+    <div>
       <CssBaseline />
       <Container maxWidth="md">
         <Box
@@ -138,7 +144,6 @@ const Todo = () => {
           </FormControl>
 
           <Box>
-            {/* Map and display the filtered tasks */}
             {filteredTasks().map((item) => (
               <Box
                 sx={{
@@ -169,9 +174,47 @@ const Todo = () => {
                       width: "50px",
                     }}
                   />
-                  {item.name}
+                  {editingTaskId === item.id ? (
+                    // Display an input field for editing
+                    <TextField
+                      value={editedText}
+                      onChange={(e) => setEditedText(e.target.value)}
+                    />
+                  ) : (
+                    // Display task text
+                    item.name
+                  )}
                 </Box>
                 <Box>
+                  {editingTaskId === item.id ? (
+                    // Show "Save" button when editing
+                    <Button
+                      variant="contained"
+                      sx={{
+                        borderRadius: "20px",
+                        padding: "4px",
+                        border: "none",
+                        color: "white",
+                      }}
+                      onClick={() => handleSaveEditedTask(item.id)}
+                    >
+                      Save
+                    </Button>
+                  ) : (
+                    // Show "Edit" button when not editing
+                    <Button
+                      variant="contained"
+                      sx={{
+                        borderRadius: "20px",
+                        padding: "4px",
+                        border: "none",
+                        color: "white",
+                      }}
+                      onClick={() => handleEditTask(item.id, item.name)}
+                    >
+                      Edit
+                    </Button>
+                  )}
                   <Button
                     variant="contained"
                     sx={{
@@ -225,5 +268,4 @@ const Todo = () => {
   );
 };
 
-// Export the Todo component
 export default Todo;
